@@ -33,6 +33,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
 
+  // Prevent background scroll when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -47,15 +48,15 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-[100] border-b border-white/10" style={{ backgroundColor: 'rgba(24, 26, 47, 0.9)', backdropFilter: 'blur(20px)' }}>
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 h-20 md:h-24 flex items-center justify-between relative">
         
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-4 group z-[210] shrink-0">
+        {/* LOGO - Always stays on top */}
+        <Link href="/" className="flex items-center gap-4 group z-[1001] shrink-0">
           <svg width="24" height="24" viewBox="0 0 40 40" fill="none" className="group-hover:rotate-90 transition-transform duration-700">
             <path d="M20 0L22 18L40 20L22 22L20 40L18 22L0 20L18 18L20 0Z" fill={COLORS.PEACH}/>
           </svg>
-          <span className="text-lg md:text-xl font-bold tracking-[0.4em] uppercase text-white font-sans">Vajra</span>
+          <span className="text-xl font-bold tracking-[0.4em] uppercase text-white font-sans">Vajra</span>
         </Link>
 
-        {/* DESKTOP CENTER NAVIGATION */}
+        {/* DESKTOP MENU - Hidden on Mobile */}
         <div className="hidden xl:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 h-full">
           {navLinks.map((link) => (
             link.name === 'Services' ? (
@@ -71,7 +72,7 @@ export default function Navbar() {
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute top-[96px] left-1/2 -translate-x-1/2 w-[1000px] grid grid-cols-3 gap-y-10 gap-x-16 p-16 shadow-2xl border-t border-white/5" style={{ backgroundColor: 'rgba(24, 26, 47, 0.98)', backdropFilter: 'blur(40px)' }}>
                       {serviceItems.map((s) => (
                         <Link key={s} href="/services" className="group flex items-center gap-5">
-                          <div className="w-2 h-2 rounded-full border border-[#B4182D] group-hover:bg-[#FDA481] group-hover:border-[#FDA481] transition-all" />
+                          <div className="w-2 h-2 rounded-full border border-[#B4182D] group-hover:bg-[#FDA481] transition-all" />
                           <span className="text-[12px] font-medium text-white/70 group-hover:text-[#FDA481] tracking-widest uppercase font-sans">{s}</span>
                         </Link>
                       ))}
@@ -85,41 +86,66 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* MOBILE HAMBURGER BUTTON */}
-        <button className="xl:hidden flex flex-col gap-2 z-[210] p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          <motion.div animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 9 : 0 }} className="w-7 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} />
-          <motion.div animate={{ opacity: isMobileMenuOpen ? 0 : 1 }} className="w-7 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} />
-          <motion.div animate={{ rotate: isMobileMenuOpen ? -45 : 0, y: isMobileMenuOpen ? -9 : 0 }} className="w-7 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} />
+        {/* MOBILE HAMBURGER / X ICON MORPH */}
+        <button className="xl:hidden flex flex-col gap-2 z-[1001] p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <motion.div 
+            animate={isMobileMenuOpen ? { rotate: 45, y: 10 } : { rotate: 0, y: 0 }}
+            className="w-8 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} 
+          />
+          <motion.div 
+            animate={isMobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+            className="w-8 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} 
+          />
+          <motion.div 
+            animate={isMobileMenuOpen ? { rotate: -45, y: -10 } : { rotate: 0, y: 0 }}
+            className="w-8 h-[1.5px]" style={{ backgroundColor: COLORS.PEACH }} 
+          />
         </button>
       </div>
 
-      {/* FULL-SCREEN MOBILE OVERLAY - SOLID BACKGROUND FIX */}
+      {/* FULL-SCREEN MOBILE DRAWER */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: '-100%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '-100%' }}
-            transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-            className="fixed inset-0 z-[200] flex flex-col pt-32 px-10 pb-10"
-            style={{ backgroundColor: COLORS.VOID }} // SOLID BACKGROUND TO PREVENT BLEED-THROUGH
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1000] flex flex-col bg-[#181A2F] p-10 pt-40"
           >
-            <div className="flex flex-col gap-6 overflow-y-auto">
+            <div className="flex flex-col gap-10 overflow-y-auto pb-20">
               {navLinks.map((link) => (
                 <div key={link.name}>
                   {link.name === 'Services' ? (
                     <div className="flex flex-col">
-                      <button onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)} className="text-3xl font-light tracking-tighter text-white flex items-center justify-between uppercase font-sans">
+                      <button 
+                        onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)} 
+                        className="text-4xl font-light tracking-tighter text-white flex items-center justify-between uppercase font-sans"
+                      >
                         Services
-                        <svg width="18" height="10" viewBox="0 0 10 6" fill="none" className={`transition-transform ${isMobileServicesOpen ? 'rotate-180' : ''}`}>
-                          <path d="M1 1L5 5L9 1" stroke={COLORS.PEACH} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                        <motion.svg 
+                          animate={{ rotate: isMobileServicesOpen ? 180 : 0 }}
+                          width="24" height="12" viewBox="0 0 10 6" fill="none"
+                        >
+                          <path d="M1 1L5 5L9 1" stroke={COLORS.PEACH} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </motion.svg>
                       </button>
+                      
+                      {/* MOBILE SERVICES ACCORDION */}
                       <AnimatePresence>
                         {isMobileServicesOpen && (
-                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="flex flex-col gap-5 pt-6 pl-4 border-l border-white/10 mt-2">
+                          <motion.div 
+                            initial={{ height: 0, opacity: 0 }} 
+                            animate={{ height: 'auto', opacity: 1 }} 
+                            exit={{ height: 0, opacity: 0 }} 
+                            className="flex flex-col gap-6 pt-8 pl-4 border-l border-[#37415C] mt-4"
+                          >
                             {serviceItems.map((s) => (
-                              <Link key={s} href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-[11px] tracking-[0.2em] uppercase text-white/50 hover:text-[#FDA481]">
+                              <Link 
+                                key={s} 
+                                href="/services" 
+                                onClick={() => setIsMobileMenuOpen(false)} 
+                                className="text-[11px] tracking-[0.3em] uppercase text-white/50 hover:text-[#FDA481] font-sans"
+                              >
                                 {s}
                               </Link>
                             ))}
@@ -128,16 +154,23 @@ export default function Navbar() {
                       </AnimatePresence>
                     </div>
                   ) : (
-                    <Link href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-light tracking-tighter text-white hover:text-[#FDA481] uppercase font-sans">
+                    <Link 
+                      href={link.href} 
+                      onClick={() => setIsMobileMenuOpen(false)} 
+                      className="text-4xl font-light tracking-tighter text-white hover:text-[#FDA481] uppercase font-sans"
+                    >
                       {link.name}
                     </Link>
                   )}
                 </div>
               ))}
             </div>
-            {/* MOBILE FOOTER DETAIL */}
-            <div className="mt-auto pt-10 border-t border-white/5">
-                <p className="text-[10px] tracking-[0.5em] uppercase text-[#37415C]">Vajra Strategic • Kathmandu</p>
+
+            {/* DECORATIVE FOOTER */}
+            <div className="mt-auto border-t border-white/5 pt-10">
+                <p className="text-[10px] tracking-[0.6em] uppercase text-[#37415C] font-sans">
+                  Vajra Strategic • Kathmandu
+                </p>
             </div>
           </motion.div>
         )}
