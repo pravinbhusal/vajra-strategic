@@ -37,7 +37,6 @@ export default function Navbar() {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
   }, [isMobileMenuOpen]);
 
-  // STYLE: Bold, All-Caps, SN Pro (Matching Reference Style)
   const navItemStyles = "text-[13px] font-bold tracking-[0.15em] uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer h-full font-sans whitespace-nowrap";
   const baseLinkColor = "text-white";
   const hoverColor = "text-[#FDA481]";
@@ -49,7 +48,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 h-20 md:h-24 flex items-center justify-between">
         
-        {/* LOGO (LEFT ALIGNED - AS PER REFERENCE) */}
+        {/* LOGO */}
         <Link href="/" className="flex items-center gap-4 group shrink-0">
           <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
             <path d="M20 0L22 18L40 20L22 22L20 40L18 22L0 20L18 18L20 0Z" fill={COLORS.PEACH}/>
@@ -60,7 +59,7 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* DESKTOP LINKS (RIGHT ALIGNED - AS PER REFERENCE) */}
+        {/* DESKTOP LINKS */}
         <div className="hidden xl:flex items-center gap-8 h-full">
           {navLinks.map((link) => (
             link.name === 'Services' ? (
@@ -102,39 +101,37 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* MOBILE TRIGGER (HAMBURGER) */}
+        {/* MOBILE TRIGGER (BRIGHT & ELEGANT FIX) */}
         <button 
-          className="xl:hidden flex flex-col gap-2 p-2"
+          className="xl:hidden flex flex-col gap-2 p-3 relative z-[110]"
           onClick={() => setIsMobileMenuOpen(true)}
         >
-          <div className="w-8 h-[2px] bg-white" />
-          <div className="w-8 h-[2px] bg-white" />
-          <div className="w-8 h-[2px] bg-white" />
+          {/* Using strict Peach color #FDA481 for maximum contrast */}
+          <div className="w-8 h-[2px] shadow-[0_0_10px_rgba(253,164,129,0.3)]" style={{ backgroundColor: COLORS.PEACH }} />
+          <div className="w-8 h-[2px] shadow-[0_0_10px_rgba(253,164,129,0.3)]" style={{ backgroundColor: COLORS.PEACH }} />
+          <div className="w-8 h-[2px] shadow-[0_0_10px_rgba(253,164,129,0.3)]" style={{ backgroundColor: COLORS.PEACH }} />
         </button>
       </div>
 
-      {/* MOBILE FULL-SCREEN MENU (MATCHING MOBILE REFERENCE) */}
+      {/* MOBILE FULL-SCREEN MENU */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[1000] flex flex-col items-center justify-center"
             style={{ backgroundColor: COLORS.VOID }}
           >
-            {/* CLOSE BUTTON (THE 'X' FROM REFERENCE) */}
+            {/* CLOSE BUTTON (BRIGHT WHITE) */}
             <button 
               onClick={() => {setIsMobileMenuOpen(false); setIsMobileServicesOpen(false);}}
-              className="absolute top-8 right-8 text-white p-4"
+              className="absolute top-8 right-8 text-white p-4 hover:text-[#FDA481] transition-colors"
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
 
-            {/* CENTERED LINKS (MATCHING REFERENCE) */}
             <div className="flex flex-col items-center gap-10 text-center">
               {navLinks.map((link) => (
                 <div key={link.name} className="flex flex-col items-center">
