@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #181A2F;
+  --foreground: #ffffff;
+}
+
+body {
+  background-color: #181A2F; /* Rule 1: Strict Background */
+  color: #ffffff;
+  font-family: "SN Pro", sans-serif; /* Rule 2: Strict Font */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sophisticated texture overlay */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 99;
+}
